@@ -9,12 +9,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { Toaster } from "../ui/toaster";
 import { useGoogleLogin } from "@react-oauth/google";
+import { clientAPI } from "@/api/api-axios.js";
+import { LOGIN_ROUTE } from "@/api/constants.js";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ role }) => {
+
   const initialData = {
     email: "",
     password: "",
@@ -22,12 +26,78 @@ const Login = ({ role }) => {
   };
 
   const [formdata, setformData] = useState(initialData);
+  // const [gmailFormdata, setGmailFormData] = useState("");
   const [error, setError] = useState("");
-  const [user, setUser] = useState([]);
+  // const [user, setUser] = useState([]);
+  const navigate = useNavigate();
 
   const handleFormChange = (e) => {
     setformData({ ...formdata, [e.target.name]: e.target.value });
   };
+
+  const loginAPI = async () => {
+    try {
+      const response = await clientAPI.post(LOGIN_ROUTE, formdata, {
+        withCredentials: true,
+      });
+      if (response.status === 200 || response.status === 201) {
+        setError("");
+        if (role === "distributor") {
+          navigate("/distributor");
+          localStorage.setItem("auth_token", response.data.user);
+          localStorage.setItem("auth_Role", "distributor");
+          sessionStorage.setItem("Role", "distributor");
+        } else if (role === "retailer") {
+          navigate("/retailer");
+          localStorage.setItem("auth_token", response.data.user);
+          localStorage.setItem("auth_Role", "retailer");
+          sessionStorage.setItem("Role", "retailer");
+        }
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        setError(error.response.data.msg);
+      } else {
+        setError(error.response.data.msg);
+      }
+    }
+  };
+
+  const gmailLoginAPI = async (formData) => {
+    try {
+      const response = await clientAPI.post(LOGIN_ROUTE, formData, {
+        withCredentials: true,
+      });
+      if (response.status === 200 || response.status === 201) {
+        setError("");
+        if (role === "distributor") {
+          navigate("/distributor");
+          localStorage.setItem("auth_token", response.data.user);
+          localStorage.setItem("auth_Role", "distributor");
+          sessionStorage.setItem("Role", "distributor");
+        } else if (role === "retailer") {
+          navigate("/retailer");
+          localStorage.setItem("auth_token", response.data.user);
+          localStorage.setItem("auth_Role", "retailer");
+          sessionStorage.setItem("Role", "retailer");
+        }
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        setError(error.response.data.msg);
+        toast({
+          variant: "destructive",
+          title: `Uh oh! ${error}`,
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: `Uh oh! Something went wrong. Please try again`,
+        });
+      }
+    }
+  };
+
   const handleSubmit = () => {
     const emailPattern =
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|org|dev|co\.in)$/;
@@ -50,35 +120,43 @@ const Login = ({ role }) => {
       });
     } else {
       setError("");
-      setformData({ ...formdata, Role: role });
-      console.log(formdata);
-      alert(formdata.Role);
+      loginAPI();
     }
   };
+
   const handleGoogleLogin = useGoogleLogin({
-    onSuccess: (response) => setUser(response.access_token),
+    onSuccess: async (response) => {
+      // setUser(response.access_token);
+      // const googleLogin = async () => {
+      try {
+        await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: {
+            Authorization: `Bearer ${response.access_token}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((userInfo) => {
+            console.log("User Info:", userInfo);
+            const gmailFormData = {
+              email: userInfo.email,
+              password: userInfo.email_verified,
+              Role: role,
+            };
+            gmailLoginAPI(gmailFormData);
+            // setGmailFormData({
+            //   email: userInfo.email,
+            //   password: userInfo.email_verified,
+            //   Role: role,
+            // });
+          });
+        // await gmailLoginAPI();
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+      // };
+    },
     onError: (error) => console.log("Login Failed:", error),
   });
-
-  const googleLogin = async () => {
-    await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-      headers: {
-        Authorization: `Bearer ${user}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((userInfo) => {
-        console.log("User Info:", userInfo);
-      })
-      .catch((error) => {
-        console.error("Error fetching user info:", error);
-      });
-  };
-
-  useEffect(() => {
-    googleLogin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
 
   return (
     <>

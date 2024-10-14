@@ -1,6 +1,13 @@
 import { RetailersDropDown } from "@/components/project/RetailersDropDown";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -20,28 +27,57 @@ const Distributor = () => {
     navigate("/billing");
   };
 
+  const profileName = () => {
+    const username = localStorage.getItem("auth_token");
+    return username.split("")[0];
+  };
+  const handleLogout = () => {
+    alert("Logged out");
+  };
   return (
     <>
       <div className="max-w-5xl mx-auto">
-        <div className="flex flex-row justify-between">
+        <div className="md:flex flex-row justify-between">
           <div className="flex flex-row items-center my-10 gap-2">
             <div className="flex flex-col" style={{ fontFamily: "Ubuntu" }}>
-              <span className="text-3xl">InvoiceMaster&nbsp;/&nbsp;</span>
-              <span className="text-base text-slate-500">Distributor</span>
+              <span className="lg:text-3xl text-xl">
+                InvoiceMaster&nbsp;/&nbsp;
+              </span>
+              <span className="md:text-base text-xs text-slate-500">
+                Distributor
+              </span>
             </div>
             <span className="mb-3">
               <RetailersDropDown />
             </span>
           </div>
-          <div className="mt-12">
-            <Button
-              variant="ghost"
-              className="inline-flex gap-2"
-              onClick={handleBilling}
-            >
-              <CirclePlus className="h-4 w-4" />
-              <span>Create Invoice</span>
-            </Button>
+          <div className="md:flex-none flex flex-row">
+            <div className="md:mt-12">
+              <Button
+                variant="ghost"
+                className="inline-flex gap-2"
+                onClick={handleBilling}
+              >
+                <CirclePlus className="h-4 w-4" />
+                <span>Create Invoice</span>
+              </Button>
+            </div>
+            <button className="ml-16">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="text-slate-200">
+                    <AvatarFallback className="bg-gray-800 text-xl pb-2">
+                      {profileName()}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <button onClick={handleLogout}>Log Out</button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </button>
           </div>
         </div>
         <Table className="mt-5">

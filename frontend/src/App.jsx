@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import { lazy, Suspense } from "react";
+import ProtectedRoutes from "./components/project/ProtectedRoutes";
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const Distributor = lazy(() => import("./pages/Distributor"));
 const Billing = lazy(() => import("./pages/Billing"));
@@ -9,9 +10,30 @@ const Retailer = lazy(() => import("./pages/Retailer"));
 function App() {
   const router = createBrowserRouter([
     { path: "/", element: <AuthPage /> },
-    { path: "/distributor", element: <Distributor /> },
-    { path: "/billing", element: <Billing /> },
-    { path: "/retailer", element: <Retailer /> },
+    {
+      path: "/distributor",
+      element: (
+        <ProtectedRoutes>
+          <Distributor />
+        </ProtectedRoutes>
+      ),
+    },
+    {
+      path: "/billing",
+      element: (
+        <ProtectedRoutes>
+          <Billing />
+        </ProtectedRoutes>
+      ),
+    },
+    {
+      path: "/retailer",
+      element: (
+        <ProtectedRoutes>
+          <Retailer />
+        </ProtectedRoutes>
+      ),
+    },
   ]);
   return (
     <>

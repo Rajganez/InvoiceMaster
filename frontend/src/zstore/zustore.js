@@ -2,8 +2,8 @@ import { create } from 'zustand';
 
 // Create the Zustand store
 const useAuthStore = create((set) => ({
-  role: 'distributor', // initial value of role
-  setRole: (newRole) => set({ role: newRole }), // function to set the role
+  name: '', // initial value of role
+  setName: (newName) => set({ name: newName }), // function to set the role
 }));
 
 export default useAuthStore;
