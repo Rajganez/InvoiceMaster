@@ -41,7 +41,6 @@ const Login = ({ role }) => {
       });
       if (response.status === 200 || response.status === 201) {
         setError("");
-        console.log(response.status);
         if (role === "distributor") {
           navigate("/distributor");
           localStorage.setItem("auth_token", response.data.user);

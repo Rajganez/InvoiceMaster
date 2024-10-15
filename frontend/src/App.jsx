@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import { lazy, Suspense } from "react";
 import ProtectedRoutes from "./components/project/ProtectedRoutes";
-import PaymentPage from "./pages/PaymentPage";
+const PaymentPage = lazy(() => import("./pages/PaymentPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const Distributor = lazy(() => import("./pages/Distributor"));
 const Billing = lazy(() => import("./pages/Billing"));
