@@ -87,18 +87,19 @@ const Login = ({ role }) => {
       }
     } catch (error) {
       console.log(error);
-      if (error.response.status === 401) {
+      // if (error.response.status === 401) {
         setError(error.response.data.msg);
         toast({
           variant: "destructive",
           title: `Uh oh! ${error}`,
         });
-      } else {
+      // }
+      //  else {
         toast({
           variant: "destructive",
           title: `Uh oh! Something went wrong. Please try again`,
         });
-      }
+      // }
     }
   };
 
@@ -140,7 +141,6 @@ const Login = ({ role }) => {
         })
           .then((response) => response.json())
           .then((userInfo) => {
-            console.log("User Info:", userInfo);
             const gmailFormData = {
               email: userInfo.email,
               password: userInfo.email_verified,
