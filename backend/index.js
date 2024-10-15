@@ -5,30 +5,43 @@ import cookieParser from "cookie-parser";
 import authRouters from "./server/routes/authRoutes.js";
 import invoiceRouters from "./server/routes/invoiceRoute.js";
 import paymentRouter from "./server/controller/paymentController.js";
+import path from 'path';
 
 // Initialize Express app and connect to MongoDB database
 const app = express();
 await connectToDB;
 
 app.use(cookieParser());
+
 // Enable CORS for the API
 app.use(
   cors({
-    origin: ["https://invoicemasterbyraj.netlify.app/"],
+    origin: ["https://invoicemasterbyraj.netlify.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"], // Add required headers
   })
 );
 
-// Create express json for body parsing
+// Parse JSON bodies
 app.use(express.json());
-// Import routes from the server/routes folder
+
+// Serve static files with correct content-type headers
+app.use(express.static('public', {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}));
+
+// Define routes
 app.use("/auth", authRouters);
 app.use("/bill", invoiceRouters);
 app.use("/gateway", paymentRouter);
 
-// Establish server connection in the port for mongodb connections
+// Establish server connection
 app.listen(
   5000,
-  console.log(`Started at ${new Date()}Server is Running in port : ${5000}`)
+  console.log(`Server started at ${new Date()}. Running on port: 5000`)
 );
