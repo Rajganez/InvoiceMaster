@@ -16,7 +16,7 @@ app.use(cookieParser());
 // Enable CORS for the API
 app.use(
   cors({
-    origin: ["https://invoicemasterbyraj.netlify.app/"],
+    origin: ["https://invoicemasterbyraj.netlify.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"], // Add required headers
