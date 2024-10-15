@@ -6,7 +6,6 @@ import {
   validatePaymentVerification,
   validateWebhookSignature,
 } from "../../../node_modules/razorpay/dist/utils/razorpay-utils.js";
-// ./dist/utils/razorpay-utils.js
 import { ObjectId } from "mongodb";
 import { verifyToken } from "../middleware/verifyToken.js";
 
