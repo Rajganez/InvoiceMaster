@@ -96,10 +96,10 @@ POST /verify-payment: Verify payment signature.
 InvoiceMaster/
 ├── backend/ # Backend Folder structure
 │ ├── server/
-│ | └── controller/ # Controller Folder structure
-│ | └── DB/ # DB Folder structure MongoDB Connection file
-│ | └── middleware/ # Cookieparser Middleware Folder structure
-│ | └── routes/ # Express Router Folder structure
+│ ├── controller/ # Controller Folder structure
+│ ├── DB/ # DB Folder structure MongoDB Connection file
+│ ├── middleware/ # Cookieparser Middleware Folder structure
+│ ├── routes/ # Express Router Folder structure
 │ └── index.js/ # Main index.js express server file
 │
 ├── frontend/
