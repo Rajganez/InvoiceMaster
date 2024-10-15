@@ -91,28 +91,30 @@ POST /verify-payment: Verify payment signature.
 
 - **Multi-currency Support: Allow transactions in different currencies.**
 
-## Folder structure
+## Folder Structure
 
+```bash
 InvoiceMaster/
-├── backend/ # Backend Folder structure
-│ ├── server/
-│ ├── controller/ # Controller Folder structure
-│ ├── DB/ # DB Folder structure MongoDB Connection file
-│ ├── middleware/ # Cookieparser Middleware Folder structure
-│ ├── routes/ # Express Router Folder structure
-│ └── index.js/ # Main index.js express server file
+├── backend/                # Backend folder structure
+│   ├── server/             # Server configurations
+│   ├── controller/         # Contains controllers for API logic
+│   ├── DB/                 # MongoDB connection file
+│   ├── middleware/         # Middleware like Cookieparser, Auth, etc.
+│   ├── routes/             # Express router for handling routes
+│   └── index.js            # Main index.js file for express server
 │
-├── frontend/
-│ ├── assets/ # Static assets like images, icons
-│ ├── components/ # Reusable components
-│ ├── pages/ # Page components (Login, distributor, etc.)
-│ ├── hooks/ # Custom React hooks
-│ ├── zstore/ # Zustand store for state management
-│ ├── utils/ # Helper functions and utilities
-│ └── App.jsx # Main application component
-├── .gitignore # Backend files
-├── package.json # Backend files
-└── README.md # Backend files
+├── frontend/               # Frontend folder structure
+│   ├── assets/             # Static assets like images, icons
+│   ├── components/         # Reusable components (Navbar, Footer, etc.)
+│   ├── pages/              # Page components (Login, Distributor, etc.)
+│   ├── hooks/              # Custom React hooks for managing logic
+│   ├── zstore/             # Zustand store for state management
+│   ├── utils/              # Helper functions and utilities
+│   └── App.jsx             # Main application component
+├── .gitignore              # Git ignore file for the backend
+├── package.json            # Backend package.json file
+└── README.md               # Project README file
+```
 
 ### Key Sections:
 
