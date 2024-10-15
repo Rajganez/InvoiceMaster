@@ -18,7 +18,6 @@ import { LOGIN_ROUTE } from "@/api/constants.js";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ role }) => {
-
   const initialData = {
     email: "",
     password: "",
@@ -73,11 +72,13 @@ const Login = ({ role }) => {
         if (role === "distributor") {
           navigate("/distributor");
           localStorage.setItem("auth_token", response.data.user);
+          localStorage.setItem("auth_Id", response.data.id);
           localStorage.setItem("auth_Role", "distributor");
           sessionStorage.setItem("Role", "distributor");
         } else if (role === "retailer") {
           navigate("/retailer");
           localStorage.setItem("auth_token", response.data.user);
+          localStorage.setItem("auth_Id", response.data.id);
           localStorage.setItem("auth_Role", "retailer");
           sessionStorage.setItem("Role", "retailer");
         }

@@ -3,9 +3,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 //Distributor Collection
-const distributorCollection = db.collection("Distributor");
+export const distributorCollection = db.collection("Distributor");
 //Retailer Collection
-const retailerCollection = db.collection("Retailer");
+export const retailerCollection = db.collection("Retailer");
 
 //Cookie Token for both the Retailer and Distributor Login
 const createToken = (email, userRole) => {
@@ -48,17 +48,22 @@ export const loginSignUp = async (req, res) => {
           password: password === true ? true : hashedPassword,
           InvoiceLimit: 20,
         });
+        const getId = await distributorCollection.findOne({ email: email });
         res.cookie("jwt", createToken(email, Role), cookieOptions);
-        return res
-          .status(201)
-          .json({ msg: "Signed-Up successfully", user: username });
+        return res.status(201).json({
+          msg: "Signed-Up successfully",
+          user: username,
+          id: getId._id.toString(),
+        });
       } else if (findDistributor) {
         //If it is an gmail OAuth login then login with the boolean value
         if (findDistributor.password === true) {
           res.cookie("jwt", createToken(email, Role), cookieOptions);
-          return res
-            .status(200)
-            .json({ msg: "Logged-In successfully", user: username });
+          return res.status(200).json({
+            msg: "Logged-In successfully",
+            user: username,
+            id: findDistributor._id.toString(),
+          });
         }
         //If it is a manual login then compare the hashed password
         else {
@@ -68,9 +73,11 @@ export const loginSignUp = async (req, res) => {
           );
           if (isMatch) {
             res.cookie("jwt", createToken(email, Role), cookieOptions);
-            return res
-              .status(200)
-              .json({ msg: "Logged-In successfully", user: username });
+            return res.status(200).json({
+              msg: "Logged-In successfully",
+              user: username,
+              id: findDistributor._id.toString(),
+            });
           } else {
             return res
               .status(401)
@@ -89,24 +96,35 @@ export const loginSignUp = async (req, res) => {
         await retailerCollection.insertOne({
           email: email,
           password: password !== true ? hashedPassword : password,
+          Invoice_Data: [],
+          Issuer_Id: [],
         });
+        const getId = await retailerCollection.findOne({ email: email });
         res.cookie("jwt", createToken(email, Role), cookieOptions);
-        return res
-          .status(201)
-          .json({ msg: "Signed-Up successfully", user: username });
+        return res.status(201).json({
+          msg: "Signed-Up successfully",
+          user: username,
+          id: getId._id.toString(),
+        });
       } else if (findRetailer) {
         if (findRetailer.password === true) {
           res.cookie("jwt", createToken(email, Role), cookieOptions);
-          return res
-            .status(200)
-            .json({ msg: "Logged-In successfully", user: username });
+          return res.status(200).json({
+            msg: "Logged-In successfully",
+            user: username,
+            id: findRetailer._id.toString(),
+          });
         } else {
           const isMatch = await bcrypt.compare(password, findRetailer.password);
           if (isMatch) {
             res.cookie("jwt", createToken(email, Role), cookieOptions);
             return res
               .status(200)
-              .json({ msg: "Logged-In successfully", user: username });
+              .json({
+                msg: "Logged-In successfully",
+                user: username,
+                id: findRetailer._id.toString(),
+              });
           } else {
             return res
               .status(401)
@@ -116,9 +134,34 @@ export const loginSignUp = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).send({ msg: "Error: " + error.message });
   }
 };
 
-//--------------------Gmail Auth Login/Sign Up--------------------//
+//--------------------Get Retailer Details--------------------//
+
+export const getRetailerDetails = async (req, res) => {
+  try {
+    const retailerData = await retailerCollection
+      .find({}, { email: 1, _id: 1, password: 0 })
+      .toArray();
+    const retailer = [];
+    for (const data of retailerData) {
+      retailer.push({
+        id: data._id.toString(),
+        value: userName(data.email),
+        label: userName(data.email).toUpperCase(),
+      });
+    }
+    return res.status(200).json({ retailer });
+  } catch (error) {
+    return res.status(500).send({ msg: "Error: " + error.message });
+  }
+};
+
+//-------------------Log Out function------------------------//
+
+export const logout = (req, res) => {
+  res.clearCookie("jwt");
+  return res.status(200).json({ msg: "Logged-Out successfully" });
+};
