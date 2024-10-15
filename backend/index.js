@@ -16,7 +16,6 @@ app.use(
   cors({
     origin: ["https://invoicemasterbyraj.netlify.app/"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
