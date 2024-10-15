@@ -45,11 +45,13 @@ const Login = ({ role }) => {
           navigate("/distributor");
           localStorage.setItem("auth_token", response.data.user);
           localStorage.setItem("auth_Role", "distributor");
+          localStorage.setItem("auth_Id", response.data.id);
           sessionStorage.setItem("Role", "distributor");
         } else if (role === "retailer") {
           navigate("/retailer");
           localStorage.setItem("auth_token", response.data.user);
           localStorage.setItem("auth_Role", "retailer");
+          localStorage.setItem("auth_Id", response.data.id);
           sessionStorage.setItem("Role", "retailer");
         }
       }
