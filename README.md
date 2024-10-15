@@ -91,6 +91,29 @@ POST /verify-payment: Verify payment signature.
 
 - **Multi-currency Support: Allow transactions in different currencies.**
 
+## Folder structure
+
+InvoiceMaster/
+├── backend/ # Backend Folder structure
+│ ├── server/
+│ | └── controller/ # Controller Folder structure
+│ | └── DB/ # DB Folder structure MongoDB Connection file
+│ | └── middleware/ # Cookieparser Middleware Folder structure
+│ | └── routes/ # Express Router Folder structure
+│ └── index.js/ # Main index.js express server file
+│
+├── frontend/
+│ ├── assets/ # Static assets like images, icons
+│ ├── components/ # Reusable components
+│ ├── pages/ # Page components (Login, distributor, etc.)
+│ ├── hooks/ # Custom React hooks
+│ ├── zstore/ # Zustand store for state management
+│ ├── utils/ # Helper functions and utilities
+│ └── App.jsx # Main application component
+├── .gitignore # Backend files
+├── package.json # Backend files
+└── README.md # Backend files
+
 ### Key Sections:
 
 - **Overview**: Brief description of the project and its purpose.
@@ -99,5 +122,6 @@ POST /verify-payment: Verify payment signature.
 - **Installation**: Step-by-step guide for setting up and running the project.
 - **API Endpoints**: Basic API structure.
 - **Future Scope**: Possible future developments for the project.
+- **Folder structure**: Organized structure to give an idea of how the project is set up.
 
 This `README.md` provides a clear and concise overview of the project, making it easier for others to understand and contribute.
