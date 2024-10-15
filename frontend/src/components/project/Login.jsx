@@ -84,6 +84,7 @@ const Login = ({ role }) => {
         }
       }
     } catch (error) {
+      console.log(error);
       if (error.response.status === 401) {
         setError(error.response.data.msg);
         toast({
