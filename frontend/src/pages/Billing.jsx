@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/hooks/use-toast";
 import useAuthStore from "@/zstore/zustore.js";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Billing = () => {
   const retailerId = useAuthStore((state) => state.Id);
@@ -29,6 +30,8 @@ const Billing = () => {
   const [error, setError] = useState("");
   const [apiError, setApiError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const navigate = useNavigate();
 
   const handleValueChange = (e) => {
     const { value } = e.target;
@@ -75,6 +78,7 @@ const Billing = () => {
       });
       if (response.status === 201) {
         setApiError("");
+        setError("");
         setSuccess(true);
         toast({
           title: "Success Message",
@@ -82,8 +86,8 @@ const Billing = () => {
         });
       }
     } catch (error) {
-      setApiError(error.response.data.msg);
       setSuccess("");
+      setApiError(error.response.data.msg);
       toast({
         variant: "destructive",
         title: `Uh oh! ${apiError}`,
@@ -101,12 +105,17 @@ const Billing = () => {
       setApiError("");
       setError("");
       BillingAPI();
+    } else {
+      setApiError("Please check all fields are filled.");
+      toast({
+        variant: "destructive",
+        title: `Uh oh! Please check all fields are filled.`,
+      });
     }
-    setApiError("Please check all fields are filled.");
-    toast({
-      variant: "destructive",
-      title: `Uh oh! Please check all fields are filled.`,
-    });
+  };
+
+  const handleNavigateBack = () => {
+    navigate("/distributor");
   };
 
   useEffect(() => {
@@ -191,6 +200,15 @@ const Billing = () => {
                 onClick={handleSubmit}
               >
                 Generate Bill
+              </Button>
+            </div>
+            <div>
+              <Button
+                variant="outline"
+                className="md:w-full font-semibold"
+                onClick={handleNavigateBack}
+              >
+                Back
               </Button>
             </div>
           </form>
